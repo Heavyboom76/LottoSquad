@@ -1,12 +1,11 @@
 // @ts-nocheck
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
 Deno.serve(async (req) => {
+  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -21,25 +20,19 @@ Deno.serve(async (req) => {
     }
 
     const configs = {
-      western_649: { n: 6, max: 49, extraLabel: 'EXTRA',     extraHint: '7-digit number, e.g. 2345671',        extra2Label: null, extra2Hint: null },
+      western_649: { n: 6, max: 49, extraLabel: 'EXTRA',     extraHint: '7-digit number, e.g. 2345671',        extra2Label: null,    extra2Hint: null },
       lotto_649:   { n: 6, max: 49, extraLabel: 'Gold Ball',  extraHint: 'number formatted like 08009419-01',   extra2Label: 'EXTRA', extra2Hint: 'formatted like 24-26-42-65-YES' },
-      lotto_max:   { n: 7, max: 52, extraLabel: null,         extraHint: null,                                  extra2Label: null, extra2Hint: null },
-      daily_grand: { n: 5, max: 49, extraLabel: null,         extraHint: null,                                  extra2Label: null, extra2Hint: null },
-      bc_49:       { n: 6, max: 49, extraLabel: 'EXTRA',      extraHint: 'number formatted like 23-45-67-1',    extra2Label: null, extra2Hint: null },
-      western_max: { n: 7, max: 50, extraLabel: 'EXTRA',      extraHint: '7-digit number, e.g. 2345671',        extra2Label: null, extra2Hint: null },
+      lotto_max:   { n: 7, max: 52, extraLabel: null,         extraHint: null,                                  extra2Label: null,    extra2Hint: null },
+      daily_grand: { n: 5, max: 49, extraLabel: null,         extraHint: null,                                  extra2Label: null,    extra2Hint: null },
+      bc_49:       { n: 6, max: 49, extraLabel: 'EXTRA',      extraHint: 'number formatted like 23-45-67-1',    extra2Label: null,    extra2Hint: null },
+      western_max: { n: 7, max: 50, extraLabel: 'EXTRA',      extraHint: '7-digit number, e.g. 2345671',        extra2Label: null,    extra2Hint: null },
     }
     const cfg = configs[lotteryType] || configs['western_649']
 
-    const extraInstruction = cfg.extraLabel
-      ? '2. The ' + cfg.extraLabel + ' number — ' + cfg.extraHint + ' (labeled "' + cfg.extraLabel + '" on the ticket)\n'
-      : ''
-
-    const extra2Instruction = cfg.extra2Label
-      ? '3. The ' + cfg.extra2Label + ' number — ' + cfg.extra2Hint + ' (labeled "' + cfg.extra2Label + '" on the ticket, separate from the Gold Ball)\n'
-      : ''
-
-    const extraJsonField  = cfg.extraLabel  ? '"extra":"<value or null>"'  : '"extra":null'
-    const extra2JsonField = cfg.extra2Label ? '"extra2":"<value or null>"' : '"extra2":null'
+    const extraInstruction  = cfg.extraLabel  ? '2. The ' + cfg.extraLabel  + ' number — ' + cfg.extraHint  + ' (labeled "' + cfg.extraLabel  + '" on the ticket)\n' : ''
+    const extra2Instruction = cfg.extra2Label ? '3. The ' + cfg.extra2Label + ' number — ' + cfg.extra2Hint + ' (labeled "' + cfg.extra2Label + '" on the ticket, separate from the Gold Ball)\n' : ''
+    const extraJsonField    = cfg.extraLabel  ? '"extra":"<value or null>"'  : '"extra":null'
+    const extra2JsonField   = cfg.extra2Label ? '"extra2":"<value or null>"' : '"extra2":null'
 
     const gameNames = {
       western_649: 'Western 6/49', lotto_649: 'Lotto 6/49', lotto_max: 'Lotto Max',
@@ -81,10 +74,7 @@ Deno.serve(async (req) => {
         messages: [{
           role: 'user',
           content: [
-            {
-              type: 'image',
-              source: { type: 'base64', media_type: mediaType || 'image/jpeg', data: imageBase64 },
-            },
+            { type: 'image', source: { type: 'base64', media_type: mediaType || 'image/jpeg', data: imageBase64 } },
             { type: 'text', text: promptText },
           ],
         }],
@@ -100,11 +90,8 @@ Deno.serve(async (req) => {
     const text = (aiData.content?.[0]?.text || '').trim() || '{"sets":[],"extra":null,"extra2":null}'
 
     let parsed
-    try {
-      parsed = JSON.parse(text)
-    } catch {
-      throw new Error('Could not parse AI response as JSON')
-    }
+    try { parsed = JSON.parse(text) }
+    catch { throw new Error('Could not parse AI response as JSON') }
 
     const validSets = (parsed.sets || []).filter(set =>
       Array.isArray(set) &&
