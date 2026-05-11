@@ -90,7 +90,7 @@ export async function renderApp(container) {
 
     <!-- Settings sheet -->
     <div id="settings-sheet" class="modal hidden">
-      <div class="modal-box" style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;border-radius:20px 20px 0 0;margin:0;padding-bottom:calc(24px + var(--safe-bottom))">
+      <div class="modal-box">
         <div style="font-family:'Bebas Neue',cursive;font-size:1.4rem;letter-spacing:0.05em;margin-bottom:4px">${escHtml(group.name)}</div>
         <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:16px">${isAdmin ? authUser.email : memberSession?.name || ''}</p>
 
