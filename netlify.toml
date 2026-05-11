@@ -6,3 +6,46 @@
   from   = "/*"
   to     = "/index.html"
   status = 200
+
+# ── Security Headers ──────────────────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Prevent clickjacking — disallow embedding in iframes
+    X-Frame-Options = "DENY"
+
+    # Prevent MIME-type sniffing
+    X-Content-Type-Options = "nosniff"
+
+    # Only send origin on cross-origin requests, no full URL
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # Lock down browser features — allow camera for ticket scanning, deny the rest
+    Permissions-Policy = "camera=(self), microphone=(), geolocation=(), payment=(), usb=()"
+
+    # HSTS — force HTTPS for 2 years, include all subdomains, eligible for preload list
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+
+    # Content Security Policy
+    # - script-src 'self'               → only our own bundled JS
+    # - style-src 'self' + unsafe-inline → our CSS bundle + inline styles used throughout the app
+    # - font-src gstatic                 → Google Fonts files
+    # - style-src googleapis             → Google Fonts stylesheet
+    # - connect-src supabase             → API calls + WebSocket realtime
+    # - img-src data: blob:              → camera captures, data URIs
+    # - worker-src 'self'                → service worker
+    # - object-src / base-uri 'none'     → block plugins and base-tag injection
+    # - frame-ancestors 'none'           → CSP-level clickjacking protection
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co; img-src 'self' data: blob:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+
+# ── Cache: immutable hashed assets (Vite fingerprints these filenames) ────────
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ── Cache: service worker must always revalidate ──────────────────────────────
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
