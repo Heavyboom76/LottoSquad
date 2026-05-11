@@ -1,4 +1,5 @@
 import { navigate, escHtml } from '../main.js'
+import { showRulesModal } from '../rules.js'
 
 export async function renderLanding(container) {
   container.innerHTML = `
@@ -48,11 +49,15 @@ export async function renderLanding(container) {
       </div>
 
       <div class="landing-footer">
-        lottosquad.ca · Made for Canadian lottery pools 🍁
+        lottosquad.ca · Made for Canadian lottery pools 🍁<br/>
+        <button id="land-rules" style="background:none;border:none;color:var(--purple-light);font-size:0.8rem;cursor:pointer;margin-top:8px;text-decoration:underline;padding:0">
+          📋 View Standard Pool Rules
+        </button>
       </div>
     </div>
   `
 
   container.querySelector('#land-signup').addEventListener('click', () => navigate('/signup'))
   container.querySelector('#land-login').addEventListener('click',  () => navigate('/login'))
+  container.querySelector('#land-rules').addEventListener('click',  () => showRulesModal())
 }

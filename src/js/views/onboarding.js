@@ -1,5 +1,6 @@
 import { getAuthUser, createGroup } from '../auth.js'
 import { navigate, showToast, escHtml } from '../main.js'
+import { DEFAULT_RULES } from '../rules.js'
 
 export async function renderOnboarding(container) {
   const user = await getAuthUser()
@@ -30,8 +31,11 @@ export async function renderOnboarding(container) {
           </div>
 
           <div>
-            <div class="label">Pool Rules (optional)</div>
-            <textarea id="ob-rules" class="text-input" rows="4" placeholder="e.g. Send e-transfer before draw day. Winnings split equally among confirmed members only. No pay = no play." style="resize:vertical"></textarea>
+            <div class="label" style="display:flex;justify-content:space-between;align-items:center">
+              <span>Pool Rules</span>
+              <button id="ob-load-defaults" style="background:none;border:none;color:var(--purple-light);font-size:0.75rem;cursor:pointer;text-decoration:underline;padding:0">Load defaults</button>
+            </div>
+            <textarea id="ob-rules" class="text-input" rows="5" placeholder="Your pool rules — members will see these when they join." style="resize:vertical;font-size:0.82rem"></textarea>
           </div>
 
           <div id="ob-error" class="error-msg hidden"></div>
@@ -42,6 +46,10 @@ export async function renderOnboarding(container) {
   `
 
   const errorEl = container.querySelector('#ob-error')
+
+  container.querySelector('#ob-load-defaults').addEventListener('click', () => {
+    container.querySelector('#ob-rules').value = DEFAULT_RULES
+  })
 
   container.querySelector('#ob-submit').addEventListener('click', async (e) => {
     const btn  = e.currentTarget

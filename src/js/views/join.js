@@ -1,5 +1,6 @@
 import { getGroupBySlug, fetchGroupMembers, createMember, setMemberSession } from '../auth.js'
 import { navigate, showToast, escHtml } from '../main.js'
+import { showRulesModal, DEFAULT_RULES } from '../rules.js'
 
 export async function renderJoin(container, slug) {
   container.innerHTML = `<div class="loading-spinner" style="min-height:100vh"></div>`
@@ -46,6 +47,9 @@ export async function renderJoin(container, slug) {
         </div>
 
         <p style="text-align:center;font-size:0.78rem;color:var(--text-dim)">Already a member? Enter your exact name to sign back in.</p>
+        <button id="join-rules-btn" style="background:none;border:none;color:var(--purple-light);font-size:0.8rem;cursor:pointer;text-decoration:underline;padding:4px 0;width:100%;text-align:center">
+          📋 View Pool Rules
+        </button>
       </div>
     </div>
   `
@@ -56,6 +60,7 @@ export async function renderJoin(container, slug) {
   nameInput.focus()
   nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') submit() })
   container.querySelector('#join-submit').addEventListener('click', submit)
+  container.querySelector('#join-rules-btn').addEventListener('click', () => showRulesModal(group.rules))
 
   async function submit() {
     const btn  = container.querySelector('#join-submit')
