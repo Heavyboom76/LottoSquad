@@ -8,6 +8,7 @@ import { getAuthUser, getAdminGroup, getMemberSession, clearMemberSession, signO
 import { supabase } from '../supabase.js'
 import { navigate, showToast, escHtml } from '../main.js'
 import { showRulesModal, DEFAULT_RULES } from '../rules.js'
+import { showHelpModal } from './help.js'
 import { renderDashboard } from './dashboard.js'
 import { renderTickets }   from './tickets.js'
 import { renderHistory }   from './history.js'
@@ -113,6 +114,7 @@ export async function renderApp(container) {
         <div style="display:flex;flex-direction:column;gap:8px">
           ${isAdmin ? `<button id="settings-invite" class="btn btn-outline">🔗 Copy Invite Link</button>` : ''}
           <button id="settings-rules" class="btn btn-ghost">📋 View Pool Rules</button>
+          <button id="settings-help" class="btn btn-ghost">❓ Help & FAQ</button>
           <button id="settings-signout" class="btn btn-ghost" style="color:var(--red)">${isAdmin ? 'Sign Out' : 'Leave Squad'}</button>
           <button id="settings-close" class="btn btn-ghost">Close</button>
         </div>
@@ -140,6 +142,11 @@ export async function renderApp(container) {
   container.querySelector('#settings-rules').addEventListener('click', () => {
     sheet.classList.add('hidden')
     showRulesModal(group.rules)
+  })
+
+  container.querySelector('#settings-help').addEventListener('click', () => {
+    sheet.classList.add('hidden')
+    showHelpModal()
   })
 
   container.querySelector('#settings-invite')?.addEventListener('click', () => {

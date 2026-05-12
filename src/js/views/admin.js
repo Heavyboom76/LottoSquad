@@ -2,7 +2,7 @@ import { supabase } from '../supabase.js'
 import { ctx } from './app.js'
 import { fetchGroupMembers, createMember, deleteMember, updateGroup } from '../auth.js'
 import { parseTicketImage } from '../ticketParser.js'
-import { getLottery, LOTTERIES } from '../lotteries.js'
+import { getLottery, LOTTERIES, calcTicketMatches } from '../lotteries.js'
 import { showToast, escHtml } from '../main.js'
 
 export async function renderAdmin(container) {
@@ -174,7 +174,9 @@ export async function renderAdmin(container) {
           ).join('')}
         </div>
         <input id="bonus-number-input" type="number" min="1" max="${lotto.bonusMax}" class="text-input" style="margin-bottom:8px" placeholder="${escHtml(lotto.bonusLabel)} number (1–${lotto.bonusMax})" />
-        <input id="prize-notes-input" type="text" class="text-input" style="margin-bottom:8px" placeholder="Prize notes (e.g. Won free play · $0)" />
+        <div id="match-preview" style="margin-bottom:8px"></div>
+        <input id="prize-amount-input" type="number" step="0.01" min="0" class="text-input" style="margin-bottom:8px" placeholder="Total prize won ($0.00 if none / free play)" />
+        <input id="prize-notes-input" type="text" class="text-input" style="margin-bottom:8px" placeholder="Prize notes (optional, e.g. 2× Free Play)" />
         <button id="confirm-settle-btn" class="btn btn-gold">💾 Save Results & Settle</button>
         <button id="cancel-settle-btn" class="btn btn-ghost" style="margin-top:6px">Cancel</button>
       </div>
@@ -264,6 +266,36 @@ function renderEditForm(ticket, lotto) {
   `
 }
 
+// ── Match preview ──────────────────────────────────────────────────────────
+function renderMatchPreview(tickets, winningNums, bonusNum, lotto) {
+  if (!tickets.length) return ''
+  const valid = winningNums.filter(n => !isNaN(n) && n >= 1 && n <= lotto.numberMax)
+  if (valid.length !== lotto.numbersPerLine) {
+    return `<p style="font-size:0.78rem;color:var(--text-muted);padding:4px 0">Enter all ${lotto.numbersPerLine} winning numbers to preview match results…</p>`
+  }
+  const winSet = new Set(valid)
+  const rows = tickets.map((t, i) => {
+    const numbers = Array.isArray(t.numbers) ? [...t.numbers].sort((a, b) => a - b) : []
+    const { tier } = calcTicketMatches(t.numbers, valid, bonusNum, lotto)
+    const isWinner   = tier && !tier.freePlay
+    const isFreePlay = tier?.freePlay
+    const border = isWinner ? 'var(--gold-dark)' : isFreePlay ? 'rgba(16,185,129,0.3)' : 'var(--border)'
+    const tierColor = isWinner ? 'var(--gold)' : 'var(--green)'
+    const balls = numbers.map(n => {
+      const hit = winSet.has(n)
+      return `<div style="width:26px;height:26px;border-radius:50%;background:${hit ? 'radial-gradient(circle at 35% 35%,#ffe066,#c87f00)' : 'var(--bg-input)'};color:${hit ? '#3A1F00' : 'var(--text-muted)'};display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:700${!hit ? ';opacity:0.45' : ''}">${n}</div>`
+    }).join('')
+    return `<div style="background:var(--bg-card2);border:1px solid ${border};border-radius:var(--radius-sm);padding:7px 10px;margin-bottom:4px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <span style="font-size:0.68rem;color:var(--text-muted)">Line ${i + 1}</span>
+        <span style="font-size:0.72rem;font-weight:700;color:${tier ? tierColor : 'var(--text-muted)'}">${tier ? escHtml(tier.label) : 'No prize'}</span>
+      </div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">${balls}</div>
+    </div>`
+  }).join('')
+  return `<div><div style="font-size:0.72rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--purple-light);margin-bottom:5px">Match Preview</div>${rows}</div>`
+}
+
 // ── Events ─────────────────────────────────────────────────────────────────
 function bindAdminEvents(container, currentDraw, members, lotto, tickets, group) {
   const reload = () => renderAdmin(container)
@@ -338,7 +370,7 @@ function bindAdminEvents(container, currentDraw, members, lotto, tickets, group)
       : 'Reopen buy-ins?'
     if (!confirm(msg)) return
     const update = currentDraw.status === 'settled'
-      ? { status: 'open', winning_numbers: null, bonus_number: null, prize_notes: null }
+      ? { status: 'open', winning_numbers: null, bonus_number: null, prize_notes: null, prize_amount: null }
       : { status: 'open' }
     const { error } = await supabase.from('draws').update(update).eq('id', currentDraw.id)
     if (error) { showToast(error.message, 'error'); return }
@@ -353,16 +385,28 @@ function bindAdminEvents(container, currentDraw, members, lotto, tickets, group)
     container.querySelector('#settle-panel')?.classList.add('hidden')
   })
 
+  // Live match preview — updates as winning numbers / bonus are typed
+  const updatePreview = () => {
+    const nums  = [...container.querySelectorAll('.winning-num')].map(i => parseInt(i.value))
+    const bonus = parseInt(container.querySelector('#bonus-number-input')?.value) || null
+    const previewEl = container.querySelector('#match-preview')
+    if (previewEl) previewEl.innerHTML = renderMatchPreview(tickets, nums, bonus, lotto)
+  }
+  container.querySelectorAll('.winning-num').forEach(inp => inp.addEventListener('input', updatePreview))
+  container.querySelector('#bonus-number-input')?.addEventListener('input', updatePreview)
+
   // Confirm settle
   container.querySelector('#confirm-settle-btn')?.addEventListener('click', async () => {
     const nums  = [...container.querySelectorAll('.winning-num')].map(i => parseInt(i.value))
     if (nums.length !== lotto.numbersPerLine || nums.some(n => isNaN(n) || n < 1 || n > lotto.numberMax)) {
       showToast(`Enter ${lotto.numbersPerLine} valid numbers (1–${lotto.numberMax})`, 'error'); return
     }
-    const bonus = parseInt(container.querySelector('#bonus-number-input').value) || null
-    const notes = container.querySelector('#prize-notes-input').value.trim() || null
+    const bonus       = parseInt(container.querySelector('#bonus-number-input').value) || null
+    const notes       = container.querySelector('#prize-notes-input').value.trim() || null
+    const prizeRaw    = parseFloat(container.querySelector('#prize-amount-input').value)
+    const prizeAmount = !isNaN(prizeRaw) && prizeRaw >= 0 ? prizeRaw : 0
     try {
-      const { error } = await supabase.from('draws').update({ status: 'settled', winning_numbers: nums, bonus_number: bonus, prize_notes: notes }).eq('id', currentDraw.id)
+      const { error } = await supabase.from('draws').update({ status: 'settled', winning_numbers: nums, bonus_number: bonus, prize_notes: notes, prize_amount: prizeAmount }).eq('id', currentDraw.id)
       if (error) throw error
       showToast('Draw settled! 🏆', 'success'); await reload()
     } catch (err) { showToast(err.message, 'error') }

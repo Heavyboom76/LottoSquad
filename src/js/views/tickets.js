@@ -1,6 +1,6 @@
 import { supabase } from '../supabase.js'
 import { ctx } from './app.js'
-import { getLottery } from '../lotteries.js'
+import { getLottery, calcTicketMatches } from '../lotteries.js'
 import { escHtml } from '../main.js'
 
 export async function renderTickets(container) {
@@ -19,12 +19,20 @@ export async function renderTickets(container) {
       return
     }
 
-    const { data: tickets } = await supabase.from('tickets').select('*')
-      .eq('draw_id', draw.id).order('created_at')
+    const [ticketsRes, buyInsRes] = await Promise.all([
+      supabase.from('tickets').select('*').eq('draw_id', draw.id).order('created_at'),
+      supabase.from('buy_ins').select('status').eq('draw_id', draw.id),
+    ])
 
-    const lotto      = getLottery(draw.lottery_type)
-    const winningNums = draw.winning_numbers || []
-    const isSettled  = draw.status === 'settled'
+    const tickets        = ticketsRes.data || []
+    const confirmedCount = (buyInsRes.data || []).filter(b => b.status === 'confirmed').length
+    const lotto          = getLottery(draw.lottery_type)
+    const winningNums    = draw.winning_numbers || []
+    const isSettled      = draw.status === 'settled'
+    const prizeAmt       = Number(draw.prize_amount) || 0
+    const prizePerPerson = (isSettled && prizeAmt > 0 && confirmedCount > 0)
+      ? (prizeAmt / confirmedCount).toFixed(2)
+      : null
 
     container.innerHTML = `
       <div class="card card-purple" style="margin-bottom:16px">
@@ -41,13 +49,25 @@ export async function renderTickets(container) {
         <div class="card card-gold" style="margin-bottom:16px">
           <div class="card-title">🏆 Winning Numbers</div>
           <div class="balls-grid" style="padding:6px 0">
-            ${[...winningNums].sort((a,b)=>a-b).map(n => `<div class="ball ball-gold">${n}</div>`).join('')}
+            ${[...winningNums].sort((a, b) => a - b).map(n => `<div class="ball ball-gold">${n}</div>`).join('')}
             ${draw.bonus_number ? `
               <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
                 <div class="ball ball-purple">${draw.bonus_number}</div>
                 <div style="font-size:0.58rem;color:var(--text-muted);font-weight:700;letter-spacing:0.06em">BONUS</div>
               </div>` : ''}
           </div>
+          ${prizeAmt > 0 ? `
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(251,191,36,0.2);display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin-bottom:2px">💰 Total Prize</div>
+                <div style="font-family:'Bebas Neue',cursive;font-size:1.5rem;color:var(--gold);letter-spacing:0.04em">$${prizeAmt.toFixed(2)}</div>
+              </div>
+              ${prizePerPerson ? `
+                <div style="text-align:right">
+                  <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:2px">${confirmedCount} members</div>
+                  <div style="font-family:'Bebas Neue',cursive;font-size:1.5rem;color:var(--gold-light);letter-spacing:0.04em">$${prizePerPerson} each</div>
+                </div>` : ''}
+            </div>` : ''}
           ${draw.prize_notes ? `<div style="margin-top:8px;font-size:0.9rem;color:var(--gold)">📋 ${escHtml(draw.prize_notes)}</div>` : ''}
         </div>
       ` : ''}
@@ -59,7 +79,7 @@ export async function renderTickets(container) {
 
       ${!tickets?.length
         ? `<div class="empty-state" style="padding:32px 0"><div class="empty-state-icon">🔢</div><div class="empty-state-title">No Tickets Yet</div><p class="text-muted">Admin will scan the ticket once it's purchased.</p></div>`
-        : tickets.map((t, i) => renderTicketCard(t, i + 1, winningNums, isSettled, lotto)).join('')
+        : tickets.map((t, i) => renderTicketCard(t, i + 1, winningNums, draw.bonus_number, isSettled, lotto)).join('')
       }
     `
   } catch (err) {
@@ -68,14 +88,19 @@ export async function renderTickets(container) {
   }
 }
 
-function renderTicketCard(ticket, num, winningNums, isSettled, lotto) {
-  const numbers    = Array.isArray(ticket.numbers) ? [...ticket.numbers].sort((a,b)=>a-b) : []
-  const winSet     = new Set(winningNums)
-  const matchCount = isSettled ? numbers.filter(n => winSet.has(n)).length : 0
-  const total      = lotto?.numbersPerLine || numbers.length
+function renderTicketCard(ticket, num, winningNums, bonusNumber, isSettled, lotto) {
+  const numbers = Array.isArray(ticket.numbers) ? [...ticket.numbers].sort((a, b) => a - b) : []
+  const winSet  = new Set(winningNums)
+
+  const { matches, tier } = isSettled
+    ? calcTicketMatches(ticket.numbers, winningNums, bonusNumber, lotto)
+    : { matches: 0, tier: null }
+
+  const isWinner   = tier && !tier.freePlay
+  const isFreePlay = tier?.freePlay
 
   return `
-    <div class="ticket-card" style="${isSettled && matchCount > 0 ? 'border-color:var(--gold-dark)' : ''}">
+    <div class="ticket-card" style="${isWinner ? 'border-color:var(--gold-dark)' : isFreePlay ? 'border-color:rgba(16,185,129,0.5)' : ''}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
         <div class="ticket-label">Quick Pick #${num}</div>
         ${ticket.serial_number ? `<div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--text-muted)">S/N: ${escHtml(ticket.serial_number)}</div>` : ''}
@@ -83,12 +108,15 @@ function renderTicketCard(ticket, num, winningNums, isSettled, lotto) {
       <div class="balls-grid">
         ${numbers.map(n => {
           const hit = isSettled && winSet.has(n)
-          return `<div class="ball ${hit ? 'ball-gold' : 'ball-white'}" style="${hit ? 'box-shadow:0 0 12px rgba(251,191,36,0.5)' : ''}">${n}</div>`
+          return `<div class="ball ${hit ? 'ball-gold' : 'ball-white'}" style="${hit ? 'box-shadow:0 0 12px rgba(251,191,36,0.5)' : (isSettled ? 'opacity:0.5' : '')}">${n}</div>`
         }).join('')}
       </div>
       ${isSettled ? `
-        <div style="margin-top:10px;text-align:center;font-size:0.82rem;color:${matchCount >= 4 ? 'var(--gold)' : 'var(--text-muted)'}">
-          ${matchCount} of ${total} match${matchCount >= total ? ' 🎉 JACKPOT!' : matchCount >= total-1 ? ' 🤩' : matchCount >= total-2 ? ' 👀' : matchCount >= total-3 ? ' 🙂' : ''}
+        <div style="margin-top:10px;text-align:center">
+          ${tier
+            ? `<span style="font-size:0.85rem;font-weight:700;color:${isWinner ? 'var(--gold)' : 'var(--green)'}">${escHtml(tier.label)}</span>`
+            : `<span style="font-size:0.82rem;color:var(--text-muted)">${matches} of ${lotto?.numbersPerLine || numbers.length} match</span>`
+          }
         </div>` : ''}
       ${(ticket.ticket_extra || ticket.extra_number || ticket.ticket_extra2) ? `
         <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:4px">
