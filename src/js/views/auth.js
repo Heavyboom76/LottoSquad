@@ -59,13 +59,11 @@ export async function renderAuth(container, mode = 'login') {
     try {
       if (isSignup) {
         await signUp(email, password)
-        // After signup, go straight to onboarding (Supabase auto-confirms in dev,
-        // or email confirm is sent — either way navigate to onboarding)
-        await navigate('/onboarding')
+        window.location.replace('/onboarding')
       } else {
         const user = await signIn(email, password)
         const group = await getAdminGroup(user.id)
-        await navigate(group ? '/app' : '/onboarding')
+        window.location.replace(group ? '/app' : '/onboarding')
       }
     } catch (err) {
       showError(err.message)

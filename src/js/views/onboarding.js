@@ -65,8 +65,7 @@ export async function renderOnboarding(container) {
 
     try {
       await createGroup({ name, etransfer_info: etransfer, rules: rules || null })
-      showToast('Squad created! 🎉', 'success')
-      await navigate('/app')
+      window.location.replace('/app')
     } catch (err) {
       showErr(err.message)
       btn.disabled = false; btn.textContent = '🚀 Create My Squad'
