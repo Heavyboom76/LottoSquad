@@ -159,8 +159,8 @@ export async function renderApp(container) {
 
   container.querySelector('#settings-signout').addEventListener('click', async () => {
     if (!confirm(isAdmin ? 'Sign out?' : 'Leave this squad? You can rejoin with the invite link.')) return
-    if (isAdmin) { await signOut(); await navigate('/') }
-    else { clearMemberSession(); await navigate('/') }
+    if (isAdmin) { signOut(); window.location.replace('/') }
+    else { clearMemberSession(); window.location.replace('/') }
   })
 
   // Initial view

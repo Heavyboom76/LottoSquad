@@ -31,7 +31,7 @@ export async function signIn(email, password) {
 
 export async function signOut() {
   clearMemberSession()
-  await supabase.auth.signOut()
+  supabase.auth.signOut().catch(() => {}) // fire-and-forget — don't block on network
 }
 
 export async function getAuthUser() {
