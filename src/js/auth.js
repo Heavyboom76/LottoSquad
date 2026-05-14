@@ -29,9 +29,15 @@ export async function signIn(email, password) {
   return data.user
 }
 
-export async function signOut() {
+export function signOut() {
   clearMemberSession()
-  supabase.auth.signOut().catch(() => {}) // fire-and-forget — don't block on network
+  // Clear the Supabase session from localStorage immediately (synchronous)
+  // so the next page load sees no session, regardless of network speed
+  Object.keys(localStorage)
+    .filter(k => k.startsWith('sb-') && k.endsWith('-auth-token'))
+    .forEach(k => localStorage.removeItem(k))
+  // Fire server-side token invalidation in the background — don't wait
+  supabase.auth.signOut().catch(() => {})
 }
 
 export async function getAuthUser() {
