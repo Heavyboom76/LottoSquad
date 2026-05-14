@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "net.lottosquad.twa.www",
+    "sha256_cert_fingerprints": [
+      "9F:7B:27:C6:0B:59:6A:F1:E2:35:F8:BD:07:CD:0C:0E:E4:31:45:1B:52:9C:65:BA:27:F1:0C:D1:2C:FC:B7:A1"
+    ]
+  }
+}]
