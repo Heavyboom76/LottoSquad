@@ -40,7 +40,7 @@
     <!-- Value from default config. -->
     <string name="orientation" translatable="false">portrait</string>
     <!-- Value from default config. -->
-    <string name="providerAuthority" translatable="false">net.lottosquad.twa.www.fileprovider</string>
+    <string name="providerAuthority" translatable="false">net.lottosquad.www.twa.fileprovider</string>
     <!-- Value from default config. -->
     <string name="webManifestUrl" translatable="false">https://www.lottosquad.net/manifest.webmanifest</string>
 

@@ -32,15 +32,15 @@
     <!-- Value from default config. -->
     <string name="generatorApp" translatable="false">bubblewrap-cli</string>
     <!-- Value from default config. -->
-    <string name="hostName" translatable="false">www.lottosquad.net</string>
+    <string name="hostName" translatable="false">lottosquad.net</string>
     <!-- Value from default config. -->
-    <string name="launchUrl" translatable="false">https://www.lottosquad.net/</string>
+    <string name="launchUrl" translatable="false">https://lottosquad.netwww.lottosquad.net</string>
     <!-- Value from default config. -->
     <string name="launcherName" translatable="false">LottoSquad</string>
     <!-- Value from default config. -->
     <string name="orientation" translatable="false">portrait</string>
     <!-- Value from default config. -->
-    <string name="providerAuthority" translatable="false">net.lottosquad.twa.www.fileprovider</string>
+    <string name="providerAuthority" translatable="false">net.lottosquad.www.twa.fileprovider</string>
     <!-- Value from default config. -->
     <string name="webManifestUrl" translatable="false">https://www.lottosquad.net/manifest.webmanifest</string>
 

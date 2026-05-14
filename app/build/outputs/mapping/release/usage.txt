@@ -15423,15 +15423,18 @@ kotlinx.coroutines.sync.SemaphoreKt$withPermit$1
 kotlinx.coroutines.sync.SemaphoreKt
 kotlinx.coroutines.sync.SemaphoreSegment
 kotlinx.coroutines.time.TimeKt
-net.lottosquad.twa.www.R$bool
-net.lottosquad.twa.www.R$color
-net.lottosquad.twa.www.R$drawable
-net.lottosquad.twa.www.R$integer
-net.lottosquad.twa.www.R$mipmap
-net.lottosquad.twa.www.R$raw
-net.lottosquad.twa.www.R$string
-net.lottosquad.twa.www.R$xml
-net.lottosquad.twa.www.R
+net.lottosquad.twa.www.Application
+net.lottosquad.twa.www.DelegationService
+net.lottosquad.twa.www.LauncherActivity
+net.lottosquad.www.twa.R$bool
+net.lottosquad.www.twa.R$color
+net.lottosquad.www.twa.R$drawable
+net.lottosquad.www.twa.R$integer
+net.lottosquad.www.twa.R$mipmap
+net.lottosquad.www.twa.R$raw
+net.lottosquad.www.twa.R$string
+net.lottosquad.www.twa.R$xml
+net.lottosquad.www.twa.R
 org.intellij.lang.annotations.Flow
 org.intellij.lang.annotations.Identifier
 org.intellij.lang.annotations.JdkConstants$AdjustableOrientation
@@ -15493,7 +15496,7 @@ org.jspecify.annotations.NonNull
 org.jspecify.annotations.NullMarked
 org.jspecify.annotations.NullUnmarked
 org.jspecify.annotations.Nullable
-androidx.activity.ComponentActivity$$InternalSyntheticThrowCCEIfNotNull$8$a1bd6d651ab59ec80aa3499b3179e00e9e49e09d1f638d332bd382cbaa60557c$0
+androidx.activity.ComponentActivity$$InternalSyntheticThrowCCEIfNotNull$9$a1bd6d651ab59ec80aa3499b3179e00e9e49e09d1f638d332bd382cbaa60557c$0
 androidx.activity.ComponentActivity$4:
     final synthetic androidx.activity.ComponentActivity this$0
 androidx.activity.ComponentActivity$NonConfigurationInstances
@@ -15509,7 +15512,7 @@ androidx.activity.OnBackPressedDispatcher
 androidx.appcompat.graphics.drawable.AnimatedStateListDrawableCompat:
     private static final java.lang.String LOGTAG
 androidx.appcompat.view.CollapsibleActionView
-androidx.appcompat.view.SupportMenuInflater$MenuState$$InternalSyntheticThrowCCEIfNotNull$8$e3857158a0da7435a9b2e1b12fa324b28f883d2aea0471324b2c8da6fdd6727e$0
+androidx.appcompat.view.SupportMenuInflater$MenuState$$InternalSyntheticThrowCCEIfNotNull$9$e3857158a0da7435a9b2e1b12fa324b28f883d2aea0471324b2c8da6fdd6727e$0
 androidx.appcompat.view.SupportMenuInflater$MenuState:
     androidx.core.view.ActionProvider itemActionProvider
 androidx.appcompat.view.menu.ActionMenuItem:
@@ -15534,7 +15537,7 @@ androidx.appcompat.widget.ActionBarOverlayLayout$ActionBarVisibilityCallback:
 androidx.appcompat.widget.ActionBarOverlayLayout:
     private androidx.appcompat.widget.ActionBarOverlayLayout$ActionBarVisibilityCallback mActionBarVisibilityCallback
 androidx.appcompat.widget.AppCompatEditText
-androidx.appcompat.widget.AppCompatHintHelper$$InternalSyntheticThrowCCEIfNotNull$8$e5cb4f19bf4700309646fa3d98d8a4073d1de762c96f950e9154357300e1cee9$0
+androidx.appcompat.widget.AppCompatHintHelper$$InternalSyntheticThrowCCEIfNotNull$9$e5cb4f19bf4700309646fa3d98d8a4073d1de762c96f950e9154357300e1cee9$0
 androidx.appcompat.widget.ContentFrameLayout$OnAttachListener:
     public abstract void onAttachedFromWindow()
     public abstract void onDetachedFromWindow()
@@ -15562,8 +15565,8 @@ androidx.appcompat.widget.SearchView:
     public abstract void clearFocus()
     static boolean isLandscapeMode(android.content.Context)
     abstract void onTextFocusChanged()
-androidx.appcompat.widget.Toolbar$ExpandedActionViewMenuPresenter$$InternalSyntheticThrowCCEIfNotNull$8$1d933375848925d2052b97180d9bad4f597066d987fa4eba31b71ba2608c602e$0
-androidx.appcompat.widget.Toolbar$ExpandedActionViewMenuPresenter$$InternalSyntheticThrowCCEIfNotNull$8$6b7e1e4af94802d42c1a6b069d4cbe4b1725b5975887d651729a6ac04098a85d$0
+androidx.appcompat.widget.Toolbar$ExpandedActionViewMenuPresenter$$InternalSyntheticThrowCCEIfNotNull$9$1d933375848925d2052b97180d9bad4f597066d987fa4eba31b71ba2608c602e$0
+androidx.appcompat.widget.Toolbar$ExpandedActionViewMenuPresenter$$InternalSyntheticThrowCCEIfNotNull$9$6b7e1e4af94802d42c1a6b069d4cbe4b1725b5975887d651729a6ac04098a85d$0
 androidx.appcompat.widget.Toolbar$OnMenuItemClickListener:
     public abstract boolean onMenuItemClick(android.view.MenuItem)
 androidx.appcompat.widget.Toolbar:
@@ -15578,9 +15581,9 @@ androidx.appcompat.widget.ViewUtils:
     private static boolean sInitComputeFitSystemWindowsMethod
     public static void computeFitSystemWindows(android.view.View,android.graphics.Rect,android.graphics.Rect)
 androidx.appcompat.widget.WithHint
-androidx.concurrent.futures.AbstractResolvableFuture$$InternalSyntheticThrowCCEIfNotNull$8$1c3a97020e5d8ba432870127fac478e1919a76bbbbeea4542d7e48788773e2a5$0
-androidx.concurrent.futures.AbstractResolvableFuture$$InternalSyntheticThrowCCEIfNotNull$8$5468c06d8017681e6113cc82283d8dd430c2c54f59efafb379e08cf867058ebd$0
-androidx.concurrent.futures.AbstractResolvableFuture$$InternalSyntheticThrowCCEIfNotNull$8$55dea8fb21d2d9b463eef9ac6e0028a5ce984ce53c3e30d133ce76e755bdaf0a$0
+androidx.concurrent.futures.AbstractResolvableFuture$$InternalSyntheticThrowCCEIfNotNull$9$1c3a97020e5d8ba432870127fac478e1919a76bbbbeea4542d7e48788773e2a5$0
+androidx.concurrent.futures.AbstractResolvableFuture$$InternalSyntheticThrowCCEIfNotNull$9$5468c06d8017681e6113cc82283d8dd430c2c54f59efafb379e08cf867058ebd$0
+androidx.concurrent.futures.AbstractResolvableFuture$$InternalSyntheticThrowCCEIfNotNull$9$55dea8fb21d2d9b463eef9ac6e0028a5ce984ce53c3e30d133ce76e755bdaf0a$0
 androidx.concurrent.futures.AbstractResolvableFuture$Failure$1
 androidx.concurrent.futures.AbstractResolvableFuture$Failure:
     static final androidx.concurrent.futures.AbstractResolvableFuture$Failure FALLBACK_INSTANCE
@@ -15590,15 +15593,15 @@ androidx.concurrent.futures.AbstractResolvableFuture$SetFuture
 androidx.concurrent.futures.AbstractResolvableFuture:
     static java.lang.Object checkNotNull(java.lang.Object)
     static java.lang.Object getFutureValue(com.google.common.util.concurrent.ListenableFuture)
-androidx.core.app.ActivityCompat$$InternalSyntheticThrowCCEIfNotNull$8$87f5f3ee39a507a821c0cac2c41ae97972cc2fd75bcf9c839fb098eb6d4675fb$0
-androidx.core.app.ActivityCompat$1$$InternalSyntheticThrowCCEIfNotNull$8$a4650200ea34729841d2251593f2c5754b8e758eca88770c25593bc1ba2598de$0
+androidx.core.app.ActivityCompat$$InternalSyntheticThrowCCEIfNotNull$9$87f5f3ee39a507a821c0cac2c41ae97972cc2fd75bcf9c839fb098eb6d4675fb$0
+androidx.core.app.ActivityCompat$1$$InternalSyntheticThrowCCEIfNotNull$9$a4650200ea34729841d2251593f2c5754b8e758eca88770c25593bc1ba2598de$0
 androidx.core.app.ActivityCompat$1
 androidx.core.app.ActivityCompat$OnRequestPermissionsResultCallback
 androidx.core.app.ActivityCompat$PermissionCompatDelegate
 androidx.core.app.ActivityCompat$RequestPermissionsRequestCodeValidator
 androidx.core.app.ActivityCompat:
     private static androidx.core.app.ActivityCompat$PermissionCompatDelegate sDelegate
-androidx.core.app.CoreComponentFactory$$InternalSyntheticThrowCCEIfNotNull$8$28d6d52be828bd520f37653069cdb0fd59ddc413967dd43deec606fddf5e864e$0
+androidx.core.app.CoreComponentFactory$$InternalSyntheticThrowCCEIfNotNull$9$28d6d52be828bd520f37653069cdb0fd59ddc413967dd43deec606fddf5e864e$0
 androidx.core.app.CoreComponentFactory$CompatWrapped
 androidx.core.graphics.TypefaceCompat:
     private static android.graphics.Typeface getBestFontFromFamily(android.content.Context,android.graphics.Typeface,int)
@@ -15648,7 +15651,7 @@ androidx.core.view.ViewCompat$OnUnhandledKeyEventListenerCompat:
 androidx.core.view.ViewCompat:
     private static java.util.WeakHashMap sViewPropertyAnimatorMap
 androidx.core.view.ViewPropertyAnimatorCompat
-androidx.core.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityActionCompat$$InternalSyntheticThrowCCEIfNotNull$8$51a518e2562bdd83f1a37db6273eca8c40d29d82445ffc5c9314f2450daba410$0
+androidx.core.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityActionCompat$$InternalSyntheticThrowCCEIfNotNull$9$51a518e2562bdd83f1a37db6273eca8c40d29d82445ffc5c9314f2450daba410$0
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityActionCompat:
     protected final androidx.core.view.accessibility.AccessibilityViewCommand mCommand
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat:
@@ -15693,7 +15696,7 @@ androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 androidx.interpolator.view.animation.LookupTableInterpolator
 androidx.lifecycle.GeneratedAdapter:
     public abstract void callMethods(androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Lifecycle$Event,boolean,androidx.lifecycle.MethodCallsLogger)
-androidx.lifecycle.LegacySavedStateHandleController$OnRecreation$$InternalSyntheticThrowCCEIfNotNull$8$0f3c89a83fc3a7f2135c574cb4d33f732e129cb9e4e380ecad0e72c87d854383$0
+androidx.lifecycle.LegacySavedStateHandleController$OnRecreation$$InternalSyntheticThrowCCEIfNotNull$9$0f3c89a83fc3a7f2135c574cb4d33f732e129cb9e4e380ecad0e72c87d854383$0
 androidx.lifecycle.LegacySavedStateHandleController$OnRecreation
 androidx.lifecycle.LegacySavedStateHandleController$tryToAddRecreator$1:
     final synthetic androidx.savedstate.SavedStateRegistry $registry
@@ -15709,7 +15712,7 @@ androidx.lifecycle.LiveData$ObserverWrapper:
     final synthetic androidx.lifecycle.LiveData this$0
 androidx.lifecycle.LiveData
 androidx.lifecycle.Observer
-androidx.lifecycle.ReportFragment$Companion$$InternalSyntheticThrowCCEIfNotNull$8$6606f6a9d6c00feabd13f693204c7c685bcfd577a1c056fdbb01af5d22a24ba7$0
+androidx.lifecycle.ReportFragment$Companion$$InternalSyntheticThrowCCEIfNotNull$9$6606f6a9d6c00feabd13f693204c7c685bcfd577a1c056fdbb01af5d22a24ba7$0
 androidx.lifecycle.SavedStateHandle
 androidx.lifecycle.SavedStateHandleAttacher:
     private final androidx.lifecycle.SavedStateHandlesProvider provider
@@ -15722,7 +15725,7 @@ androidx.lifecycle.SavedStateHandlesProvider
 androidx.lifecycle.SingleGeneratedAdapterObserver:
     private final androidx.lifecycle.GeneratedAdapter generatedAdapter
 androidx.lifecycle.ViewModel
-androidx.lifecycle.ViewModelStore$$InternalSyntheticThrowCCEIfNotNull$8$4974ffd0409b622f7fbaa298988b27e875449ecaf326da696f57e12afb4a7769$0
+androidx.lifecycle.ViewModelStore$$InternalSyntheticThrowCCEIfNotNull$9$4974ffd0409b622f7fbaa298988b27e875449ecaf326da696f57e12afb4a7769$0
 androidx.lifecycle.ViewModelStore
 androidx.lifecycle.ViewModelStoreOwner
 androidx.savedstate.Recreator:

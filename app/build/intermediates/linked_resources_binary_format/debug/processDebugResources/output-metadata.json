@@ -4,15 +4,15 @@
     "type": "LINKED_RESOURCES_BINARY_FORMAT",
     "kind": "Directory"
   },
-  "applicationId": "net.lottosquad.twa.www",
+  "applicationId": "net.lottosquad.www.twa",
   "variantName": "debug",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 2,
-      "versionName": "2",
+      "versionCode": 1,
+      "versionName": "1",
       "outputFile": "linked-resources-binary-format-debug.ap_"
     }
   ],

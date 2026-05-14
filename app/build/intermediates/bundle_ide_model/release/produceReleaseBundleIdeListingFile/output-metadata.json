@@ -4,7 +4,7 @@
     "type": "BUNDLE",
     "kind": "RegularFile"
   },
-  "applicationId": "net.lottosquad.twa.www",
+  "applicationId": "net.lottosquad.www.twa",
   "variantName": "release",
   "elements": [
     {

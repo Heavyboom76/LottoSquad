@@ -17,7 +17,7 @@
         \"relation\": [\"delegate_permission/common.handle_all_urls\"],
         \"target\": {
             \"namespace\": \"web\",
-            \"site\": \"https://www.lottosquad.net\"
+            \"site\": \"https://lottosquad.net\"
         }
     }]
     
@@ -29,6 +29,6 @@
     <string name="launchUrl" translatable="false">https://www.lottosquad.net/</string>
     <string name="launcherName" translatable="false">LottoSquad</string>
     <string name="orientation" translatable="false">portrait</string>
-    <string name="providerAuthority" translatable="false">net.lottosquad.twa.www.fileprovider</string>
+    <string name="providerAuthority" translatable="false">net.lottosquad.www.twa.fileprovider</string>
     <string name="webManifestUrl" translatable="false">https://www.lottosquad.net/manifest.webmanifest</string>
 </resources>

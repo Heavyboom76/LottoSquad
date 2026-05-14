@@ -4,15 +4,15 @@
     "type": "MERGED_MANIFESTS",
     "kind": "Directory"
   },
-  "applicationId": "net.lottosquad.twa.www",
+  "applicationId": "net.lottosquad.www.twa",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 2,
-      "versionName": "2",
+      "versionCode": 1,
+      "versionName": "1",
       "outputFile": "AndroidManifest.xml"
     }
   ],

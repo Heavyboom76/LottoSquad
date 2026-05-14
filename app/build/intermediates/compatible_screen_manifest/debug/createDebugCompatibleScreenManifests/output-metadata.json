@@ -4,7 +4,7 @@
     "type": "COMPATIBLE_SCREEN_MANIFEST",
     "kind": "Directory"
   },
-  "applicationId": "net.lottosquad.twa.www",
+  "applicationId": "net.lottosquad.www.twa",
   "variantName": "debug",
   "elements": []
 }
