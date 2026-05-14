@@ -56,6 +56,8 @@ export async function renderTickets(container) {
                 <div style="font-size:0.58rem;color:var(--text-muted);font-weight:700;letter-spacing:0.06em">BONUS</div>
               </div>` : ''}
           </div>
+          ${draw.winning_extra  ? `<div style="margin-top:8px;font-size:0.82rem;color:var(--gold)">⭐ ${escHtml(lotto.extraLabel  || 'EXTRA')}: <span style="font-family:'JetBrains Mono',monospace;font-size:0.9rem">${escHtml(draw.winning_extra)}</span></div>`  : ''}
+          ${draw.winning_extra2 ? `<div style="margin-top:4px;font-size:0.82rem;color:var(--gold)">⭐ ${escHtml(lotto.extra2Label || 'EXTRA')}: <span style="font-family:'JetBrains Mono',monospace;font-size:0.9rem">${escHtml(draw.winning_extra2)}</span></div>` : ''}
           ${prizeAmt > 0 ? `
             <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(251,191,36,0.2);display:flex;justify-content:space-between;align-items:center">
               <div>

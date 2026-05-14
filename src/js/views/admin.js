@@ -174,6 +174,8 @@ export async function renderAdmin(container) {
           ).join('')}
         </div>
         <input id="bonus-number-input" type="number" min="1" max="${lotto.bonusMax}" class="text-input" style="margin-bottom:8px" placeholder="${escHtml(lotto.bonusLabel)} number (1–${lotto.bonusMax})" />
+        ${lotto.hasExtra  ? `<input id="winning-extra-input"  type="text" class="text-input" style="margin-bottom:8px" placeholder="Winning ${escHtml(lotto.extraLabel)}  — ${escHtml(lotto.extraHint)}" />` : ''}
+        ${lotto.hasExtra2 ? `<input id="winning-extra2-input" type="text" class="text-input" style="margin-bottom:8px" placeholder="Winning ${escHtml(lotto.extra2Label)} — ${escHtml(lotto.extra2Hint)}" />` : ''}
         <div id="match-preview" style="margin-bottom:8px"></div>
         <input id="prize-amount-input" type="number" step="0.01" min="0" class="text-input" style="margin-bottom:8px" placeholder="Total prize won ($0.00 if none / free play)" />
         <input id="prize-notes-input" type="text" class="text-input" style="margin-bottom:8px" placeholder="Prize notes (optional, e.g. 2× Free Play)" />
@@ -370,7 +372,7 @@ function bindAdminEvents(container, currentDraw, members, lotto, tickets, group)
       : 'Reopen buy-ins?'
     if (!confirm(msg)) return
     const update = currentDraw.status === 'settled'
-      ? { status: 'open', winning_numbers: null, bonus_number: null, prize_notes: null, prize_amount: null }
+      ? { status: 'open', winning_numbers: null, bonus_number: null, prize_notes: null, prize_amount: null, winning_extra: null, winning_extra2: null }
       : { status: 'open' }
     const { error } = await supabase.from('draws').update(update).eq('id', currentDraw.id)
     if (error) { showToast(error.message, 'error'); return }
@@ -401,12 +403,14 @@ function bindAdminEvents(container, currentDraw, members, lotto, tickets, group)
     if (nums.length !== lotto.numbersPerLine || nums.some(n => isNaN(n) || n < 1 || n > lotto.numberMax)) {
       showToast(`Enter ${lotto.numbersPerLine} valid numbers (1–${lotto.numberMax})`, 'error'); return
     }
-    const bonus       = parseInt(container.querySelector('#bonus-number-input').value) || null
-    const notes       = container.querySelector('#prize-notes-input').value.trim() || null
-    const prizeRaw    = parseFloat(container.querySelector('#prize-amount-input').value)
-    const prizeAmount = !isNaN(prizeRaw) && prizeRaw >= 0 ? prizeRaw : 0
+    const bonus        = parseInt(container.querySelector('#bonus-number-input').value) || null
+    const notes        = container.querySelector('#prize-notes-input').value.trim() || null
+    const prizeRaw     = parseFloat(container.querySelector('#prize-amount-input').value)
+    const prizeAmount  = !isNaN(prizeRaw) && prizeRaw >= 0 ? prizeRaw : 0
+    const winExtra     = container.querySelector('#winning-extra-input')?.value.trim()  || null
+    const winExtra2    = container.querySelector('#winning-extra2-input')?.value.trim() || null
     try {
-      const { error } = await supabase.from('draws').update({ status: 'settled', winning_numbers: nums, bonus_number: bonus, prize_notes: notes, prize_amount: prizeAmount }).eq('id', currentDraw.id)
+      const { error } = await supabase.from('draws').update({ status: 'settled', winning_numbers: nums, bonus_number: bonus, prize_notes: notes, prize_amount: prizeAmount, winning_extra: winExtra, winning_extra2: winExtra2 }).eq('id', currentDraw.id)
       if (error) throw error
       showToast('Draw settled! 🏆', 'success'); await reload()
     } catch (err) { showToast(err.message, 'error') }

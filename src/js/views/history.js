@@ -68,6 +68,8 @@ function renderDrawItem(draw) {
                 <div class="mini-ball" style="background:radial-gradient(circle at 35% 35%,#9B5CF6,#5B21B6);color:#fff">${draw.bonus_number}</div>
               </div>` : ''}
           </div>
+          ${draw.winning_extra  ? `<div style="margin-top:6px;font-size:0.75rem;color:var(--gold)">⭐ ${escHtml(lotto.extraLabel  || 'EXTRA')}: <span style="font-family:'JetBrains Mono',monospace">${escHtml(draw.winning_extra)}</span></div>`  : ''}
+          ${draw.winning_extra2 ? `<div style="margin-top:3px;font-size:0.75rem;color:var(--gold)">⭐ ${escHtml(lotto.extra2Label || 'EXTRA')}: <span style="font-family:'JetBrains Mono',monospace">${escHtml(draw.winning_extra2)}</span></div>` : ''}
         </div>` : ''}
 
       <div class="draw-history-details">
