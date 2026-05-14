@@ -35,8 +35,8 @@ export async function signOut() {
 }
 
 export async function getAuthUser() {
-  const { data } = await supabase.auth.getUser()
-  return data?.user || null
+  const { data } = await supabase.auth.getSession()
+  return data?.session?.user || null
 }
 
 // ── Admin's group ─────────────────────────────────────────────────────────
